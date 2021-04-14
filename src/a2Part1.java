@@ -49,11 +49,16 @@ public class a2Part1 {
         // TODO: Perform a single backpropagation pass using the first instance only. (In other words, train with 1
         //  instance for 1 epoch!). Hint: you will need to first get the weights from a forward pass.
 
+        nn.train(instances,integer_encoded,1);
+
         System.out.println("Weights after performing BP for first instance only:");
         System.out.println("Hidden layer weights:\n" + Arrays.deepToString(nn.hidden_layer_weights));
         System.out.println("Output layer weights:\n" + Arrays.deepToString(nn.output_layer_weights));
 
         // TODO: Train for 100 epochs, on all instances.
+
+
+
         System.out.println("\nAfter training:");
         System.out.println("Hidden layer weights:\n" + Arrays.deepToString(nn.hidden_layer_weights));
         System.out.println("Output layer weights:\n" + Arrays.deepToString(nn.output_layer_weights));
