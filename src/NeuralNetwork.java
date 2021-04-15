@@ -23,9 +23,10 @@ public class NeuralNetwork {
 
     //Calculate neuron activation for an input
     public double sigmoid(double input) {
-        double output = Double.NaN; //TODO! ???
+        double output = Double.NaN; //TODO!
 
         output = 1 / (1+(Math.exp(input)));
+
         return output;
     }
 
@@ -73,7 +74,7 @@ public class NeuralNetwork {
                 output_layer_betas[i] = beta;
             }
 
-            System.out.println("OL betas: " + Arrays.toString(output_layer_betas));
+           // System.out.println("OL betas: " + Arrays.toString(output_layer_betas));
 
             double[] hidden_layer_betas = new double[num_hidden];
             // TODO! Calculate hidden layer betas.
@@ -87,7 +88,7 @@ public class NeuralNetwork {
                 hidden_layer_betas[i] = hiddenBeta;
             }
 
-            System.out.println("HL betas: " + Arrays.toString(hidden_layer_betas));
+           // System.out.println("HL betas: " + Arrays.toString(hidden_layer_betas));
 
             // This is a HxO array (H hidden nodes, O outputs)
             double[][] delta_output_layer_weights = new double[num_hidden][num_outputs];
@@ -131,11 +132,14 @@ public class NeuralNetwork {
             }
         }
 
-        System.out.println("Placeholder");
+       // System.out.println("Updated weights!");
     }
 
     public void train(double[][] instances, int[] desired_outputs, int epochs) {
+
         for (int epoch = 0; epoch < epochs; epoch++) {
+            double count = 0;
+            double wrong = 0;
             System.out.println("epoch = " + epoch);
             int[] predictions = new int[instances.length];
             for (int i = 0; i < instances.length; i++) {
@@ -144,7 +148,9 @@ public class NeuralNetwork {
                 double[][][] delta_weights = backward_propagate_error(instance, outputs[0], outputs[1], desired_outputs[i]);
 
                 int predicted_class = -1; // TODO! done
-                predictions = predict(instances);
+
+                predicted_class = predict(instances)[i];
+
                 predictions[i] = predicted_class;
 
                 //We use online learning, i.e. update the weights after every instance.
@@ -152,18 +158,18 @@ public class NeuralNetwork {
             }
 
             // Print new weights
+
             System.out.println("Hidden layer weights \n" + Arrays.deepToString(hidden_layer_weights));
             System.out.println("Output layer weights  \n" + Arrays.deepToString(output_layer_weights));
 
             // TODO: Print accuracy achieved over this epoch
             double acc = Double.NaN;
-            double count = 0;
 
-            for(int i = 0; i<predictions.length; i++){
+            for(int i = 0; i<instances.length; i++){
                 if(predictions[i] == desired_outputs[i]) {count++;}
-
+                else {wrong++;}
             }
-            acc = (count/predictions.length) * 100;
+            acc = (count/(count+wrong)) * 100;
             System.out.println("acc = " + acc);
         }
     }
@@ -173,20 +179,31 @@ public class NeuralNetwork {
         for (int i = 0; i < instances.length; i++) {
             double[] instance = instances[i];
             double[][] outputs = forward_pass(instance);
+
             int predicted_class = -1;  // TODO !Should be 0, 1, or 2.
+            double max = Double.MIN_VALUE;
 
-            int outputValue = Integer.MIN_VALUE;
-            int index = -1;
-
-            for(int j = 0; j < outputs[1].length; j++){
-                if(outputs[1][j] > outputValue)
-                    index = j;
+            for(int j = 0; j < outputs[outputs.length-1].length; j++){
+                if(outputs[outputs.length-1][j] > max)
+                    max = outputs[outputs.length-1][j];
+                    predicted_class = j;
             }
 
-            predicted_class = index;
             predictions[i] = predicted_class;
         }
         return predictions;
     }
 
 }
+/**
+ * int predicted_class = -1;
+ *             int maxIndex = -1;
+ *             int maxValue = Integer.MIN_VALUE;
+ *
+ *             for(int j = 0; j < outputs[outputs.length-1].length; j++){
+ *                 if(outputs[outputs.length-1][j] > maxValue){ maxIndex = j; }
+ *             }
+ *
+ *             predicted_class = maxIndex;
+ *             predictions[i] = predicted_class;
+ */

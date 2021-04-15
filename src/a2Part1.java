@@ -14,6 +14,7 @@ public class a2Part1 {
         rescaler.rescaleData(instances);
         System.out.println(Arrays.deepToString(instances));
 
+
         // We can"t use strings as labels directly in the network, so need to do some transformations
         LabelEncoder label_encoder = new LabelEncoder(labels);
         // encode "Adelie" as 1, "Chinstrap" as 2, "Gentoo" as 3
@@ -49,7 +50,17 @@ public class a2Part1 {
         // TODO: Perform a single backpropagation pass using the first instance only. (In other words, train with 1
         //  instance for 1 epoch!). Hint: you will need to first get the weights from a forward pass.
 
-        nn.train(instances,integer_encoded,1);
+        double [][] singleInstance = new double[1][4];
+        int [] desired = new int[1];
+
+        int index = 0; // first instance
+
+        for(int i = 0; i<4;i++) { //Initialises 2d array with just the first instance
+            singleInstance[0][i] = instances[index][i];
+        }
+        desired[0] = integer_encoded[index];
+        nn.train(singleInstance,desired,1);
+
 
         System.out.println("Weights after performing BP for first instance only:");
         System.out.println("Hidden layer weights:\n" + Arrays.deepToString(nn.hidden_layer_weights));
@@ -57,6 +68,7 @@ public class a2Part1 {
 
         // TODO: Train for 100 epochs, on all instances.
 
+        //nn.train(instances,integer_encoded,1);
 
 
         System.out.println("\nAfter training:");
@@ -72,6 +84,8 @@ public class a2Part1 {
         rescaler.rescaleData(instances_test);
 
         // TODO: Compute and print the test accuracy
+
+
         System.out.println("Finished!");
     }
 
