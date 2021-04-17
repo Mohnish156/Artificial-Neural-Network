@@ -58,8 +58,10 @@ public class a2Part1 {
         for(int i = 0; i<4;i++) { //Initialises 2d array with just the first instance
             singleInstance[0][i] = instances[index][i];
         }
-        desired[0] = integer_encoded[index];
-        nn.train(singleInstance,desired,1);
+
+        desired[0] = integer_encoded[index]; //WRONG maybe
+
+        nn.train(singleInstance,desired,1); //desired is wrong
 
 
         System.out.println("Weights after performing BP for first instance only:");
@@ -68,7 +70,7 @@ public class a2Part1 {
 
         // TODO: Train for 100 epochs, on all instances.
 
-        //nn.train(instances,integer_encoded,1);
+        nn.train(instances,integer_encoded,100);
 
 
         System.out.println("\nAfter training:");
@@ -82,6 +84,7 @@ public class a2Part1 {
 
         // scale the test according to our training data.
         rescaler.rescaleData(instances_test);
+
 
         // TODO: Compute and print the test accuracy
 
