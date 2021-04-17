@@ -70,7 +70,7 @@ public class a2Part1 {
 
         // TODO: Train for 100 epochs, on all instances.
 
-        nn.train(instances,integer_encoded,100);
+       // nn.train(instances,integer_encoded,100);
 
 
         System.out.println("\nAfter training:");

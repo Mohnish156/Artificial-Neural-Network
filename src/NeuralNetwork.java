@@ -25,13 +25,13 @@ public class NeuralNetwork {
     public double sigmoid(double input) {
         double output = Double.NaN; //TODO!
 
-        output = 1 / (1+(Math.exp(-input)));
-
+        output = 1 / (1+(Math.exp((-input))));
         return output;
     }
 
     //Feed forward pass input to a network output
     public double[][] forward_pass(double[] inputs) {
+
         double[] hidden_layer_outputs = new double[num_hidden];
         for (int i = 0; i < num_hidden; i++) {
             // TODO! Calculate the weighted sum, and then compute the final output.
@@ -60,11 +60,14 @@ public class NeuralNetwork {
             output = sigmoid(weighted_sum);
             output_layer_outputs[i] = output;
         }
+
+
         return new double[][]{hidden_layer_outputs, output_layer_outputs};
     }
 
     public double[][][] backward_propagate_error(double[] inputs, double[] hidden_layer_outputs,
                                                  double[] output_layer_outputs, int desired_outputs) {
+
 
             double[] output_layer_betas = new double[num_outputs];
             // TODO! Calculate output layer betas.
@@ -133,15 +136,14 @@ public class NeuralNetwork {
                 this.hidden_layer_weights[i][j] += delta_hidden_layer_weights[i][j];
             }
         }
-
        // System.out.println("Updated weights!");
     }
 
     public void train(double[][] instances, int[] desired_outputs, int epochs) {
 
         for (int epoch = 0; epoch < epochs; epoch++) {
+
             double count = 0;
-            double wrong = 0;
             System.out.println("epoch = " + epoch);
             int[] predictions = new int[instances.length];
             for (int i = 0; i < instances.length; i++) {
@@ -170,9 +172,8 @@ public class NeuralNetwork {
 
             for(int i = 0; i<instances.length; i++){
                 if(predictions[i] == desired_outputs[i]) {count++;}
-                else {wrong++;}
             }
-            acc = (count/(count+wrong)) * 100;
+            acc = (count/instances.length) * 100;
             System.out.println("acc = " + acc);
         }
     }
