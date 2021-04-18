@@ -25,7 +25,7 @@ public class NeuralNetwork {
     public double sigmoid(double input) {
         double output = Double.NaN; //TODO!
 
-        output = 1 / (1+(Math.exp((-input))));
+        output = 1 / (1+Math.exp(-input));
         return output;
     }
 
@@ -33,13 +33,15 @@ public class NeuralNetwork {
     public double[][] forward_pass(double[] inputs) {
 
         double[] hidden_layer_outputs = new double[num_hidden];
+
         for (int i = 0; i < num_hidden; i++) {
             // TODO! Calculate the weighted sum, and then compute the final output.
             double weighted_sum = 0;
             double output = 0;
 
-            for(int j = 0; j < inputs.length; j++){
-                weighted_sum += (inputs[j] * hidden_layer_weights[j][i]);
+            for (int j = 0; j < inputs.length; j++) {
+                weighted_sum += (hidden_layer_weights[j][i] * inputs[j]);
+
             }
 
             output = sigmoid(weighted_sum);
@@ -54,13 +56,12 @@ public class NeuralNetwork {
             double output = 0;
 
             for(int j = 0; j < hidden_layer_outputs.length; j++){
-                weighted_sum += (hidden_layer_outputs[j] * output_layer_weights[j][i]);
+                weighted_sum += (output_layer_weights[j][i] * hidden_layer_outputs[j]);
             }
 
             output = sigmoid(weighted_sum);
             output_layer_outputs[i] = output;
         }
-
 
         return new double[][]{hidden_layer_outputs, output_layer_outputs};
     }
@@ -72,13 +73,13 @@ public class NeuralNetwork {
             double[] output_layer_betas = new double[num_outputs];
             // TODO! Calculate output layer betas.
 
-            double outputBeta;
+            double outputBeta = 0;
             for (int i = 0; i < num_outputs; i++) {
                 outputBeta = desired_outputs - output_layer_outputs[i];
                 output_layer_betas[i] = outputBeta;
             }
 
-         //  System.out.println("OL betas: " + Arrays.toString(output_layer_betas));
+            System.out.println("OL betas: " + Arrays.toString(output_layer_betas));
 
             double[] hidden_layer_betas = new double[num_hidden];
             // TODO! Calculate hidden layer betas.
@@ -87,8 +88,8 @@ public class NeuralNetwork {
             for(int i = 0; i < num_hidden; i++) {
                 hiddenBeta = 0;
                 for (int j = 0; j < num_outputs; j++) {
-                    hiddenBeta += output_layer_weights[i][j] * output_layer_outputs[j] *
-                            (1 - output_layer_outputs[j]) * output_layer_betas[j] ;
+                    hiddenBeta += (output_layer_weights[i][j] * output_layer_outputs[j] *
+                            (1 - output_layer_outputs[j]) * output_layer_betas[j]);
                     }
                 hidden_layer_betas[i] = hiddenBeta;
             }
@@ -100,9 +101,9 @@ public class NeuralNetwork {
             // TODO! Calculate output layer weight changes.
 
             for(int i = 0; i < num_hidden; i++){
-                for(int j = 0; j < num_outputs; j++ ){
-                    delta_output_layer_weights [i][j] += learning_rate * hidden_layer_outputs[i] *
-                            output_layer_outputs[j] * (1 - hidden_layer_outputs[i]) * output_layer_betas[j];
+                for(int j = 0; j < num_outputs; j++){
+                    delta_output_layer_weights [i][j] = (learning_rate * hidden_layer_outputs[i] *
+                            output_layer_outputs[j] * (1 - hidden_layer_outputs[i]) * output_layer_betas[j]);
 
                 }
             }
@@ -113,11 +114,10 @@ public class NeuralNetwork {
 
             for(int i = 0; i < num_inputs; i++){
                 for(int j = 0; j < num_hidden; j++){
-                    delta_hidden_layer_weights [i][j] = learning_rate * inputs[i] *
-                            hidden_layer_outputs[j] * (1 - hidden_layer_outputs[j]) * hidden_layer_betas[j];
+                    delta_hidden_layer_weights [i][j] = (learning_rate * inputs[i] *
+                            hidden_layer_outputs[j] * (1 - hidden_layer_outputs[j]) * hidden_layer_betas[j]);
                 }
             }
-
 
         // Return the weights we calculated, so they can be used to update all the weights.
         return new double[][][]{delta_output_layer_weights, delta_hidden_layer_weights};
@@ -125,17 +125,20 @@ public class NeuralNetwork {
 
     public void update_weights(double[][] delta_output_layer_weights, double[][] delta_hidden_layer_weights) {
         // TODO! Update the weights
+
         for(int i = 0; i < num_hidden; i++){
             for(int j = 0; j < num_outputs; j++){
                 this.output_layer_weights[i][j] += delta_output_layer_weights[i][j];
             }
-        }
 
+        }
         for(int i = 0; i < num_inputs; i++){
             for(int j = 0; j < num_hidden; j++){
                 this.hidden_layer_weights[i][j] += delta_hidden_layer_weights[i][j];
             }
         }
+
+
        // System.out.println("Updated weights!");
     }
 
@@ -144,6 +147,7 @@ public class NeuralNetwork {
         for (int epoch = 0; epoch < epochs; epoch++) {
 
             double count = 0;
+
             System.out.println("epoch = " + epoch);
             int[] predictions = new int[instances.length];
             for (int i = 0; i < instances.length; i++) {
@@ -161,7 +165,6 @@ public class NeuralNetwork {
                 update_weights(delta_weights[0], delta_weights[1]);
             }
 
-
             // Print new weights
 
             System.out.println("Hidden layer weights \n" + Arrays.deepToString(hidden_layer_weights));
@@ -173,7 +176,7 @@ public class NeuralNetwork {
             for(int i = 0; i<instances.length; i++){
                 if(predictions[i] == desired_outputs[i]) {count++;}
             }
-            acc = (count/instances.length) * 100;
+            acc =  (count/instances.length) * 100;
             System.out.println("acc = " + acc);
         }
     }
@@ -193,7 +196,6 @@ public class NeuralNetwork {
                     predicted_class = j;
                 }
             }
-
             predictions[i] = predicted_class;
         }
         return predictions;

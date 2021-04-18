@@ -50,6 +50,8 @@ public class a2Part1 {
         // TODO: Perform a single backpropagation pass using the first instance only. (In other words, train with 1
         //  instance for 1 epoch!). Hint: you will need to first get the weights from a forward pass.
 
+
+
         double [][] singleInstance = new double[1][4];
         int [] desired = new int[1];
 
@@ -58,10 +60,10 @@ public class a2Part1 {
         for(int i = 0; i<4;i++) { //Initialises 2d array with just the first instance
             singleInstance[0][i] = instances[index][i];
         }
+        desired[0] = integer_encoded[0];
+        nn.train(singleInstance,desired,1);
 
-        desired[0] = integer_encoded[index]; //WRONG maybe
 
-        nn.train(singleInstance,desired,1); //desired is wrong
 
 
         System.out.println("Weights after performing BP for first instance only:");
@@ -70,7 +72,7 @@ public class a2Part1 {
 
         // TODO: Train for 100 epochs, on all instances.
 
-       // nn.train(instances,integer_encoded,100);
+        nn.train(instances,integer_encoded,100);
 
 
         System.out.println("\nAfter training:");
