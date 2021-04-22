@@ -67,7 +67,7 @@ public class NeuralNetwork {
     }
 
     public double[][][] backward_propagate_error(double[] inputs, double[] hidden_layer_outputs,
-                                                 double[] output_layer_outputs, int []desired_outputs) {
+                                                 double[] output_layer_outputs, int[] desired_outputs) {
 
 
             double[] output_layer_betas = new double[num_outputs];
@@ -102,9 +102,8 @@ public class NeuralNetwork {
 
             for(int i = 0; i < num_hidden; i++){
                 for(int j = 0; j < num_outputs; j++){
-                    delta_output_layer_weights [i][j] = (learning_rate * hidden_layer_outputs[i] *
-                            output_layer_outputs[j] * (1 - hidden_layer_outputs[i]) * output_layer_betas[j]);
-
+                    delta_output_layer_weights [i][j] = learning_rate * hidden_layer_outputs[i] *
+                            output_layer_outputs[j] * (1 - output_layer_outputs[j]) * output_layer_betas[j];
                 }
             }
 
@@ -156,7 +155,6 @@ public class NeuralNetwork {
                 int predicted_class = -1; // TODO! done
 
                 predicted_class = predict(instances)[i];
-
                 predictions[i] = predicted_class;
 
                 //We use online learning, i.e. update the weights after every instance.
