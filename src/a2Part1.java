@@ -52,17 +52,22 @@ public class a2Part1 {
 
 
 
-        double [][] singleInstance = new double[1][4];
-        int [] desired = new int[1];
+        double [] singleInstance = new double[4];
 
-        int index = 0; // first instance
 
-        for(int i = 0; i<4;i++) { //Initialises 2d array with just the first instance
-            singleInstance[0][i] = instances[index][i];
-        }
-        desired[0] = integer_encoded[0];
-        nn.train(singleInstance,desired,1);
+        //Initialises 2d array with just the first instance
+        singleInstance[0] = instances[0][0];
 
+        double[][] outputs = nn.forward_pass(singleInstance);
+        double[][][] delta_weights = nn.backward_propagate_error(singleInstance, outputs[0], outputs[1], onehot_encoded[0]);
+
+//        int predicted_class = -1; // TODO! done
+//
+//        predicted_class = nn.predict(instances)[0];
+
+
+        //We use online learning, i.e. update the weights after every instance.
+        nn.update_weights(delta_weights[0], delta_weights[1]);
 
 
 
@@ -72,7 +77,9 @@ public class a2Part1 {
 
         // TODO: Train for 100 epochs, on all instances.
 
-        nn.train(instances,integer_encoded,100);
+
+        nn.train(instances, onehot_encoded, 100);
+
 
 
         System.out.println("\nAfter training:");

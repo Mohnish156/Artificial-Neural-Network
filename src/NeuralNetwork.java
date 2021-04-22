@@ -67,19 +67,19 @@ public class NeuralNetwork {
     }
 
     public double[][][] backward_propagate_error(double[] inputs, double[] hidden_layer_outputs,
-                                                 double[] output_layer_outputs, int desired_outputs) {
+                                                 double[] output_layer_outputs, int []desired_outputs) {
 
 
             double[] output_layer_betas = new double[num_outputs];
             // TODO! Calculate output layer betas.
 
-            double outputBeta = 0;
+            double outputBeta;
             for (int i = 0; i < num_outputs; i++) {
-                outputBeta = desired_outputs - output_layer_outputs[i];
+                outputBeta = desired_outputs[i] - output_layer_outputs[i];
                 output_layer_betas[i] = outputBeta;
             }
 
-            System.out.println("OL betas: " + Arrays.toString(output_layer_betas));
+            //System.out.println("OL betas: " + Arrays.toString(output_layer_betas));
 
             double[] hidden_layer_betas = new double[num_hidden];
             // TODO! Calculate hidden layer betas.
@@ -142,12 +142,10 @@ public class NeuralNetwork {
        // System.out.println("Updated weights!");
     }
 
-    public void train(double[][] instances, int[] desired_outputs, int epochs) {
+    public void train(double[][] instances, int[][] desired_outputs, int epochs) {
 
         for (int epoch = 0; epoch < epochs; epoch++) {
-
-            double count = 0;
-
+            double correct = 0;
             System.out.println("epoch = " + epoch);
             int[] predictions = new int[instances.length];
             for (int i = 0; i < instances.length; i++) {
@@ -174,9 +172,11 @@ public class NeuralNetwork {
             double acc = Double.NaN;
 
             for(int i = 0; i<instances.length; i++){
-                if(predictions[i] == desired_outputs[i]) {count++;}
+                if(predictions[i] == 0 && desired_outputs[i][0] == 1) {correct++;}
+                else if(predictions[i] == 1 && desired_outputs[i][1] == 1) {correct++;}
+                else if(predictions[i] == 2 && desired_outputs[i][2] == 1) {correct++;}
             }
-            acc =  (count/instances.length) * 100;
+            acc =  (correct/instances.length) * 100;
             System.out.println("acc = " + acc);
         }
     }
