@@ -81,7 +81,6 @@ public class a2Part1 {
         nn.train(instances, onehot_encoded, 100);
 
 
-
         System.out.println("\nAfter training:");
         System.out.println("Hidden layer weights:\n" + Arrays.deepToString(nn.hidden_layer_weights));
         System.out.println("Output layer weights:\n" + Arrays.deepToString(nn.output_layer_weights));
@@ -95,7 +94,23 @@ public class a2Part1 {
         rescaler.rescaleData(instances_test);
 
 
+
         // TODO: Compute and print the test accuracy
+
+        int[][] onehot_encoded_test = label_encoder.oneHotEncode(labels_test);
+        int[] predictions = nn.predict(instances_test);
+
+        double acc = 0;
+        double correct = 0;
+
+        for(int i = 0; i<instances_test.length; i++){
+            if(predictions[i] == 0 && onehot_encoded_test[i][0] == 1) {correct++;}
+            else if(predictions[i] == 1 && onehot_encoded_test[i][1] == 1) {correct++;}
+            else if(predictions[i] == 2 && onehot_encoded_test[i][2] == 1) {correct++;}
+        }
+
+        acc =  (correct/instances_test.length) * 100;
+        System.out.println("acc = " + acc);
 
 
         System.out.println("Finished!");

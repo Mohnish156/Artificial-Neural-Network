@@ -200,15 +200,4 @@ public class NeuralNetwork {
     }
 
 }
-/**
- * int predicted_class = -1;
- *             int maxIndex = -1;
- *             int maxValue = Integer.MIN_VALUE;
- *
- *             for(int j = 0; j < outputs[outputs.length-1].length; j++){
- *                 if(outputs[outputs.length-1][j] > maxValue){ maxIndex = j; }
- *             }
- *
- *             predicted_class = maxIndex;
- *             predictions[i] = predicted_class;
- */
+
