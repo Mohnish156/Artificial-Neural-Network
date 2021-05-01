@@ -79,7 +79,7 @@ public class NeuralNetwork {
                 output_layer_betas[i] = outputBeta;
             }
 
-            //System.out.println("OL betas: " + Arrays.toString(output_layer_betas));
+           // System.out.println("OL betas: " + Arrays.toString(output_layer_betas));
 
             double[] hidden_layer_betas = new double[num_hidden];
             // TODO! Calculate hidden layer betas.
@@ -137,8 +137,6 @@ public class NeuralNetwork {
             }
         }
 
-
-       // System.out.println("Updated weights!");
     }
 
     public void train(double[][] instances, int[][] desired_outputs, int epochs) {

@@ -51,21 +51,10 @@ public class a2Part1 {
         //  instance for 1 epoch!). Hint: you will need to first get the weights from a forward pass.
 
 
-
-        double [] singleInstance = new double[4];
-
-
         //Initialises 2d array with just the first instance
-        singleInstance[0] = instances[0][0];
-
+        double [] singleInstance = instances[0];
         double[][] outputs = nn.forward_pass(singleInstance);
         double[][][] delta_weights = nn.backward_propagate_error(singleInstance, outputs[0], outputs[1], onehot_encoded[0]);
-
-//        int predicted_class = -1; // TODO! done
-//
-//        predicted_class = nn.predict(instances)[0];
-
-
         //We use online learning, i.e. update the weights after every instance.
         nn.update_weights(delta_weights[0], delta_weights[1]);
 
@@ -80,7 +69,6 @@ public class a2Part1 {
 
         nn.train(instances, onehot_encoded, 100);
 
-
         System.out.println("\nAfter training:");
         System.out.println("Hidden layer weights:\n" + Arrays.deepToString(nn.hidden_layer_weights));
         System.out.println("Output layer weights:\n" + Arrays.deepToString(nn.output_layer_weights));
@@ -94,7 +82,6 @@ public class a2Part1 {
         rescaler.rescaleData(instances_test);
 
 
-
         // TODO: Compute and print the test accuracy
 
         int[][] onehot_encoded_test = label_encoder.oneHotEncode(labels_test);
@@ -105,7 +92,7 @@ public class a2Part1 {
 
         for(int i = 0; i<instances_test.length; i++){
             if(predictions[i] == 0 && onehot_encoded_test[i][0] == 1) {correct++;}
-            else if(predictions[i] == 1 && onehot_encoded_test[i][1] == 1) {correct++;}
+            else if(predictions[i] == 1 && onehot_encoded_test[i][1] == 1) { correct++;}
             else if(predictions[i] == 2 && onehot_encoded_test[i][2] == 1) {correct++;}
         }
 
