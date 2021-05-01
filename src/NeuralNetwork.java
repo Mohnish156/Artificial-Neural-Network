@@ -174,7 +174,7 @@ public class NeuralNetwork {
                 else if(predictions[i] == 1 && desired_outputs[i][1] == 1) {correct++;}
                 else if(predictions[i] == 2 && desired_outputs[i][2] == 1) {correct++;}
             }
-            acc =  (correct/instances.length) * 100;
+            acc = (correct/instances.length) * 100;
             System.out.println("acc = " + acc);
         }
     }
