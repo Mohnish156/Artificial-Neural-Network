@@ -7,6 +7,7 @@ public class NeuralNetwork {
     private final int num_hidden;
     private final int num_outputs;
     private final double learning_rate;
+    boolean first = true;
 
     public NeuralNetwork(int num_inputs, int num_hidden, int num_outputs, double[][] initial_hidden_layer_weights, double[][] initial_output_layer_weights, double learning_rate) {
         //Initialise the network
@@ -172,17 +173,25 @@ public class NeuralNetwork {
                 else if(predictions[i] == 1 && desired_outputs[i][1] == 1) {correct++;}
                 else if(predictions[i] == 2 && desired_outputs[i][2] == 1) {correct++;}
             }
+
             acc = (correct/instances.length) * 100;
             System.out.println("acc = " + acc);
         }
     }
 
     public int[] predict(double[][] instances) {
+
         int[] predictions = new int[instances.length];
         for (int i = 0; i < instances.length; i++) {
             double[] instance = instances[i];
             double[][] outputs = forward_pass(instance);
+            if(first) {
+                System.out.println("\noutputs for first instance:");
+                System.out.println("Hidden Layer outputs: " + outputs[0][0] +" " + outputs[0][1]);
+                System.out.println("Output Layer outputs: " + outputs[1][0] +" " + outputs[1][1] + " " + outputs[1][2] + "\n");
 
+            }
+            first=false;
             int predicted_class = -1;  // TODO !Should be 0, 1, or 2.
             double max = Double.MIN_VALUE;
 
